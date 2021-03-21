@@ -1,17 +1,11 @@
 import json
-
 import requests
-
 import pymongo
 
-from pymongo import MongoClient
-#myclient = MongoClient() #connect to default host & port
 myclient = pymongo.MongoClient("mongodb://localhost:27017")
-mydb = myclient["mydatabase"]
-
+mydatabase = myclient["mydatabase"]
 dblist = myclient.list_database_names()
 print(dblist)
-
 if "mydatabase" in dblist:
     print('The database exists.')
 
@@ -19,16 +13,15 @@ url = 'https://rest.coinapi.io/v1/exchanges'
 headers = {'X-CoinAPI-Key': 'B284C4BF-9B46-46F4-B377-0E1CA1EEECC7'}
 response = requests.get(url, headers=headers).json()
 
+#print(json.dumps(response, indent=4))
 
-mycol = mydb["cryptos"]
-x = mycol.insert_many(response)
+mycollection = mydatabase["cryptos"]
+x = mycollection.insert_many(response)
+myclient.close()
 
-print(mydb.list_collection_names())
-query = mycol.find({"exchange_id": {"$regex": "^B"}})
-for y in query:
-    print(y)
-#mycol.drop()
+print(mydatabase.list_collection_names())
+for i in range(len(response)):
+    print(response[i]['exchange_id'], response[i]['volume_1hrs_usd'])
 
-#with open('output.json', 'w') as outfile:
-#    json.dump(response, outfile)
-#
+# query = mycollection.find({"exchange_id": {"$regex": "^BTC"}})
+# mycollection.drop()
