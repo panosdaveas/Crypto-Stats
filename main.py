@@ -4,6 +4,7 @@ import requests
 import pymongo
 import matplotlib.pyplot as plt
 import numpy as np
+from pprint import pprint
 
 # create and connect to mangoDB
 # pip3 install mongodb-community@4.4
@@ -25,34 +26,30 @@ response = requests.get(url, headers=headers).json()
 # populate database's collection
 # currently with asset's name & price in usd
 mycollection = mydatabase["cryptos"]
-listid = []
-listprice =[]
+myCryptos = {"BTC", "ETH", "DOGE", "ADA", "BNB"}
 for key in response:
     if 'price_usd' in key:
-        mydict = {'asset_id': key['asset_id'], 'price_usd': key['price_usd']}
+        mydict = {"asset_id": key['asset_id'], "price_usd": key['price_usd']}
         x = mycollection.insert_one(mydict).inserted_id
 
-listid = mycollection.distinct("asset_id")
-listprice = mycollection.distinct("price_usd")
-# for i in range(len(listid)):
-#    print(listid[i], listprice[i])
+listName = [mycollection.count_documents({})]
+listPrice = [mycollection.count_documents({})]
+for i in mycollection.find():
+    print('{0} {1}'.format(i['asset_id'], i['price_usd']))
+    listName.append(i['asset_id'])
+    listPrice.append(i['price_usd'])
 
+query1 = mycollection.find_one({"asset_id": "BTC"})
+query2 = mycollection.find_one({"asset_id": "ETH"})
+for i in mycollection.find():
+    print(i)
 # Plot operations
 # pip3 install matplotlib
-xpoints = []
-ypoints = []
-for i in range(10):
-    xpoints.append(listid[i])
-    ypoints.append((listprice[i]))
-    print(xpoints[i], ypoints[i])
-
-x = np.array(xpoints)
-y = np.array(ypoints)
-plt.scatter(x, y)
-plt.xlabel("asset_id")
-plt.ylabel("price_usd")
+xpoints = np.array(listName[0:10])
+ypoints = np.array(listPrice[0:10])
+plt.scatter(xpoints, ypoints)
 plt.show()
 
 # close session
-mycollection.drop()
-myclient.close()
+#mycollection.drop()
+#myclient.close()
