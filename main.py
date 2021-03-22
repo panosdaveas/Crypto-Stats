@@ -35,7 +35,9 @@ for document in bitcoin.find({}, {"_id": False}):
 
 xpoints = np.array(listDates)
 ypoints = np.array(listPrices)
-plt.plot(ypoints)
+plt.plot(ypoints, linewidth=0.6)
+plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
+plt.axhline(y=57500, color='r', linestyle='--', linewidth=0.5)
 plt.show()
 
 # close session
