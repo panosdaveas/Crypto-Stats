@@ -5,7 +5,6 @@ import pymongo
 import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
-from pprint import pprint  # prettyPrinting
 
 # create database and connect to mangoDB server
 myclient = pymongo.MongoClient("mongodb://localhost:27017")
