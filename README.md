@@ -32,3 +32,7 @@ Be sure to have your system's `mongo`'s service stopped, or running at a differe
 
 # API
 Request limit from [coinAPI](https://rest.coinapi.io/v1/assets/BTC) = 100 / day
+
+# Current State
+
+![myplot](https://user-images.githubusercontent.com/63146477/112148330-6cdb9180-8be6-11eb-9b99-3cabbe073fc7.png)
