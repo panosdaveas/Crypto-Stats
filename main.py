@@ -1,10 +1,8 @@
 # imports...
 import requests
 import pymongo
-import matplotlib.pyplot as plt
-import numpy as np
 from datetime import datetime
-import os
+from plot import plot_function
 
 # create database and connect to mongoDB server
 myclient = pymongo.MongoClient("mongodb://localhost:27017")
@@ -32,15 +30,7 @@ for document in bitcoin.find({}, {"_id": False}):
     listDates.append(document['date'])
     listPrices.append(document['price'])
 
-xpoints = np.array(listDates)
-ypoints = np.array(listPrices)
-plt.plot(ypoints, linewidth=0.6)
-plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
-plt.axhline(y=56590, color='r', linestyle='--', linewidth=0.5)
-x = np.arange(len(ypoints))
-plt.xticks([])
-plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
-plt.show()
+plot_function(listDates, listPrices)
 
 # close session
 #bitcoin.drop()
