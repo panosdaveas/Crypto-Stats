@@ -31,7 +31,7 @@ are:
 Be sure to have your system's `mongo`'s service stopped, or running at a different port.
 
 # API
-Request limit from [coinAPI](https://rest.coinapi.io/v1/assets/BTC) = 100 / day
+Request limit from [coinAPI](https://docs.coinapi.io/#md-rest-api) = 100 / day
 
 # Current State
 
