@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pymongo
 
 
 class SnappingCursor:
@@ -53,15 +52,16 @@ def plot_function(results, purchases):
         listDates.append(document['date'])
         listPrices.append(document['price'])
 
-    last = purchases[0]
 
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
+    if len(purchases) != 0:
+        last = purchases[0]['price']
+        plt.axhline(last, color='r', linestyle='--', linewidth=0.5, label='purchased')
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
-    plt.axhline(last['price'], color='r', linestyle='--', linewidth=0.5, label='purchased')
     plt.xticks([])
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints)
@@ -70,4 +70,4 @@ def plot_function(results, purchases):
 
 
 if __name__ == '__main__':
-    plot_function(results=pymongo.cursor.Cursor, purchases=pymongo.cursor.Cursor)
+    plot_function(results=list, purchases=list)

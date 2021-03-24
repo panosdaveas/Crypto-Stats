@@ -27,8 +27,8 @@ entry = bitcoin.insert_one(doc).inserted_id
 #bitcoin.update_many({'buy': {'$exists': 1}}, {'$unset': {'buy': 1}})  # delete field: 'buy'
 
 # Plot operations
-purchases = bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).limit(1)
-results = bitcoin.find({}, {"_id": False})
+purchases = list(bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).limit(1))
+results = list(bitcoin.find({}, {"_id": False}))
 plot_function(results, purchases)
 
 # close session
