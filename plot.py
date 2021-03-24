@@ -44,7 +44,7 @@ class SnappingCursor:
             self.ax.figure.canvas.draw()
 
 
-def plot_function(results, last):
+def plot_function(results, purchases):
 
     listDates = []
     listPrices = []
@@ -52,6 +52,8 @@ def plot_function(results, last):
     for document in results:
         listDates.append(document['date'])
         listPrices.append(document['price'])
+
+    last = purchases[0]
 
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
@@ -68,4 +70,4 @@ def plot_function(results, last):
 
 
 if __name__ == '__main__':
-    plot_function(results=pymongo.cursor.Cursor, last=str)
+    plot_function(results=pymongo.cursor.Cursor, purchases=pymongo.cursor.Cursor)
