@@ -12,7 +12,6 @@ class SnappingCursor:
         self.x, self.y = line.get_data()
         self._last_index = None
         # text location in axes coords
-        #self.text = ax.text(0.5, 0.5, '', transform=ax.transAxes, alpha=0.5)
         self.text = ax.text(0.25, 0.5, '', transform=ax.transAxes, alpha=0.5)
 
     def set_cross_hair_visible(self, visible):
@@ -44,14 +43,14 @@ class SnappingCursor:
             self.ax.figure.canvas.draw()
 
 
-def plot_function(listDates, listPrices):
+def plot_function(listDates, listPrices, last):
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
-    plt.axhline(y=54320, color='r', linestyle='--', linewidth=0.5, label='purchased')
+    plt.axhline(last['price'], color='r', linestyle='--', linewidth=0.5, label='purchased')
     plt.xticks([])
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints)
@@ -60,4 +59,4 @@ def plot_function(listDates, listPrices):
 
 
 if __name__ == '__main__':
-    plot_function(listDates=list, listPrices=list)
+    plot_function(listDates=list, listPrices=list, last=str)

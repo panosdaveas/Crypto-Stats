@@ -22,6 +22,20 @@ bitcoin = mydatabase[response[0]['asset_id']]
 doc = {"date": datetime.now().strftime('%d-%m-%Y, %H:%M:%S'), "price": response[0]['price_usd']}
 entry = bitcoin.insert_one(doc).inserted_id
 
+#for i in bitcoin.find({'buy': False}):
+#    print(i['buy'])
+
+# create purchase collection
+purchase = mydatabase['purchase']
+buy = False
+last = dict
+
+if buy is True:
+    entry = purchase.insert_one(doc).inserted_id
+
+for document in purchase.find().sort('_id', -1).limit(1):
+    last = document
+
 # Plot operations
 listDates = []
 listPrices = []
@@ -30,8 +44,9 @@ for document in bitcoin.find({}, {"_id": False}):
     listDates.append(document['date'])
     listPrices.append(document['price'])
 
-plot_function(listDates, listPrices)
+plot_function(listDates, listPrices, last)
 
 # close session
-#bitcoin.drop()
+# bitcoin.drop()
+#purchase.drop()
 myclient.close()
