@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pymongo
 
 
 class SnappingCursor:
@@ -43,7 +44,15 @@ class SnappingCursor:
             self.ax.figure.canvas.draw()
 
 
-def plot_function(listDates, listPrices, last):
+def plot_function(results, last):
+
+    listDates = []
+    listPrices = []
+
+    for document in results:
+        listDates.append(document['date'])
+        listPrices.append(document['price'])
+
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
@@ -59,4 +68,4 @@ def plot_function(listDates, listPrices, last):
 
 
 if __name__ == '__main__':
-    plot_function(listDates=list, listPrices=list, last=str)
+    plot_function(results=pymongo.cursor.Cursor, last=str)
