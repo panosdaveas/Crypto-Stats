@@ -35,4 +35,5 @@ Request limit from [coinAPI](https://rest.coinapi.io/v1/assets/BTC) = 100 / day
 
 # Current State
 
-![myplot](![Screen Recording 2021-03-24 at 10 46 33 AM](https://user-images.githubusercontent.com/63146477/112281271-8a643600-8c8e-11eb-9f6d-58ddce2b2783.gif))
+![Screen Recording 2021-03-24 at 10 46 33 AM](https://user-images.githubusercontent.com/63146477/112281434-b8e21100-8c8e-11eb-97e7-7b3577a1dad3.gif)
+
