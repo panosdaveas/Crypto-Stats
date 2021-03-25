@@ -52,15 +52,16 @@ def plot_function(results, last_trade):
         listDates.append(document['date'])
         listPrices.append(document['price'])
 
-
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
     if len(last_trade) != 0:
-        last = last_trade[0]['price']
-        plt.axhline(last, color='r', linestyle='--', linewidth=0.5, label='purchased')
+        plt.axhline(last_trade[0]['price'], color='r', linestyle='--', linewidth=0.5, label='purchased')
+        text = ('open_trade @ %1.2f, %s' % (last_trade[0]['price'], last_trade[0]['date']))
+        plt.figtext(0.5, 0.01, text, wrap=True, ha='center', fontsize=9, alpha=0.5)
+
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)

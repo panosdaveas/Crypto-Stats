@@ -19,9 +19,9 @@ response = requests.get(url, headers=headers).json()
 
 # populate bitcoin_collection
 bitcoin = mydatabase[response[0]['asset_id']]
-buy = False
+open_trade = False
 doc = {'date': datetime.now().strftime('%d-%m-%Y, %H:%M:%S'), 'price': response[0]['price_usd']}
-if buy:
+if open_trade:
     doc['buy'] = True  # append dict when a purchase takes place
 entry = bitcoin.insert_one(doc).inserted_id
 
@@ -34,7 +34,7 @@ def close_trades():
 
 
 # Plot operations
-last_open_trade = list(bitcoin.find({'buy': True}).sort('date', -1).limit(1))
+last_open_trade = list(bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).limit(1))
 results = list(bitcoin.find({}, {'_id': False}))
 plot_function(results, last_open_trade)
 
