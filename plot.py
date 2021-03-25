@@ -43,7 +43,7 @@ class SnappingCursor:
             self.ax.figure.canvas.draw()
 
 
-def plot_function(results, purchases):
+def plot_function(results, last_trade):
 
     listDates = []
     listPrices = []
@@ -58,8 +58,8 @@ def plot_function(results, purchases):
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
-    if len(purchases) != 0:
-        last = purchases[0]['price']
+    if len(last_trade) != 0:
+        last = last_trade[0]['price']
         plt.axhline(last, color='r', linestyle='--', linewidth=0.5, label='purchased')
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
@@ -70,4 +70,4 @@ def plot_function(results, purchases):
 
 
 if __name__ == '__main__':
-    plot_function(results=list, purchases=list)
+    plot_function(results=list, last_trade=list)
