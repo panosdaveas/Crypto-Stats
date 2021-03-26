@@ -3,6 +3,7 @@ import requests
 import pymongo
 from datetime import datetime
 from plot import plot_function
+from Math import price_calculator
 
 # create database and connect to mongoDB server
 myclient = pymongo.MongoClient('mongodb://localhost:27017')
@@ -33,10 +34,15 @@ def close_trades():
         print(trade['_id'])
 
 
-# Plot operations
+# queries
 last_open_trade = list(bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).limit(1))
 results = list(bitcoin.find({}, {'_id': False}))
-plot_function(results, last_open_trade)
+
+# math operations
+current_trade = price_calculator(results, last_open_trade)
+
+# plot operations
+plot_function(results, current_trade)
 
 # close session
 # bitcoin.drop()

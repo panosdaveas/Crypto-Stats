@@ -1,19 +1,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from Math import Trade
 
 
 class SnappingCursor:
 
-    def __init__(self, ax, line, minY_value, xpoints, current_value, open_trade, trade_id):
+    def __init__(self, ax, line, minY_value, xpoints, trade_id, trade):
         self.xpoints = xpoints
         self.ax = ax
         self.horizontal_line = ax.axhline(y=minY_value, color='k', lw=0.5, ls='--')
         self.vertical_line = ax.axvline(color='k', lw=0.5, ls='--')
         self.x, self.y = line.get_data()
         self._last_index = None
-        self.current_value = ax.axhline(current_value, color='c', lw=0.5, ls='--')
-        self.trade = open_trade
-        self.trade_id = trade_id
+        self.trade = trade
+        if self.trade is not None:
+            self.current_price = ax.axhline(trade[1], color='green', lw=0.5, ls='--')
+            if trade[2] < 0:
+                self.current_price = ax.axhline(trade[1], color='red', lw=0.5, ls='--')
+            self.trade_value = trade[0]
+            self.trade_id = trade_id
+            self.percentage = trade[2]
         # text location in axes coords
         self.text = ax.text(0.25, 0.5, '', transform=ax.transAxes, alpha=0.5)
 
@@ -22,7 +28,8 @@ class SnappingCursor:
         self.horizontal_line.set_visible(False)
         self.vertical_line.set_visible(visible)
         self.text.set_visible(visible)
-        self.current_value.set_visible(visible)
+        if self.trade is not None:
+            self.current_price.set_visible(visible)
         return need_redraw
 
     def on_mouse_move(self, event):
@@ -44,40 +51,38 @@ class SnappingCursor:
             self.horizontal_line.set_ydata(y)
             self.vertical_line.set_xdata(x)
             self.text.set_text('%1.2f, %s' % (y, self.xpoints[x]))
-            if self.trade - 100 <= event.ydata <= self.trade + 100:
-                self.text.set_text('open_trade @ %1.2f, %s' % (self.trade, self.xpoints[self.trade_id]))
+            if self.trade is not None:
+                if self.trade_value - 100 <= event.ydata <= self.trade_value + 100:
+                    self.text.set_text('open_trade @ %1.2f  p/l %1.2f %%' % (self.trade_value, self.percentage))
             self.ax.figure.canvas.draw()
 
 
-def plot_function(results, last_trade):
+def plot_function(results, trade):
 
     listDates = []
     listPrices = []
-    open_trade = last_trade[0]['price']
     trade_id = 0
     for i, document in enumerate(results, start=0):
         listDates.append(document['date'])
         listPrices.append(document['price'])
-        if document['price'] == open_trade:
+        if document['price'] == trade[0]:
             trade_id = i
-
-    current_value = listPrices[len(listPrices) - 1]
 
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
-    if len(last_trade) != 0:
-        plt.axhline(last_trade[0]['price'], color='r', linestyle='--', linewidth=0.5, label='purchased')
+    if trade is not None:
+        plt.axhline(trade[0], color='blue', linestyle='--', linewidth=0.5, label='purchased')
 
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
-    snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, current_value, open_trade, trade_id)
+    snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade)
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
     plt.show()
 
 
 if __name__ == '__main__':
-    plot_function(results=list, last_trade=list)
+    plot_function(results=list, trade=Trade)
