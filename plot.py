@@ -14,12 +14,12 @@ class SnappingCursor:
         self._last_index = None
         self.trade = trade
         if self.trade is not None:
-            self.current_price = ax.axhline(trade[1], color='green', lw=0.5, ls='--')
-            if trade[2] < 0:
-                self.current_price = ax.axhline(trade[1], color='red', lw=0.5, ls='--')
-            self.trade_value = trade[0]
+            self.current_price = ax.axhline(trade.current_price, color='green', lw=0.5, ls='--')
+            if trade.percentage < 0:
+                self.current_price = ax.axhline(trade.current_price, color='red', lw=0.5, ls='--')
+            self.trade_value = trade.trade_open
             self.trade_id = trade_id
-            self.percentage = trade[2]
+            self.percentage = trade.percentage
         # text location in axes coords
         self.text = ax.text(0.25, 0.5, '', transform=ax.transAxes, alpha=0.5)
 
@@ -81,6 +81,8 @@ def plot_function(results, trade):
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade)
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
+    #plt.scatter(trade_id, trade[0], marker='+')
+    plt.tight_layout()
     plt.show()
 
 

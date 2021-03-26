@@ -1,6 +1,7 @@
 from typing import NamedTuple
 
 
+# struct-like
 class Trade(NamedTuple):
     trade_open: float
     current_price: float
