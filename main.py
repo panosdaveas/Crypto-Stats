@@ -1,5 +1,4 @@
 # imports...
-import requests
 import pymongo
 from datetime import datetime
 from plot import plot_function
@@ -13,18 +12,14 @@ print(dblist)
 if 'mydatabase' in dblist:
     print('The database exists.')
 
-# call CoinAPI/fetch data for Bitcoin
-url = 'https://rest.coinapi.io/v1/assets/BTC'
-headers = {'X-CoinAPI-Key': 'B284C4BF-9B46-46F4-B377-0E1CA1EEECC7'}
-response = requests.get(url, headers=headers).json()
 
-# populate bitcoin_collection
-bitcoin = mydatabase[response[0]['asset_id']]
-open_trade = False
-doc = {'date': datetime.now().strftime('%d-%m-%Y, %H:%M:%S'), 'price': response[0]['price_usd']}
-if open_trade:
-    doc['buy'] = True  # append dict when a purchase takes place
-entry = bitcoin.insert_one(doc).inserted_id
+# recover BTC collection
+bitcoin = mydatabase['BTC']
+#open_trade = False
+#if open_trade:
+#    last_entry = list(bitcoin.find().sort('_id', -1).limit(1))
+#    doc['buy'] = True  # append dict when a purchase takes place
+#entry = bitcoin.insert_one(doc).inserted_id
 
 
 # close trades
@@ -42,7 +37,7 @@ results = list(bitcoin.find({}, {'_id': False}))
 current_trade = price_calculator(results, last_open_trade)
 
 # plot operations
-plot_function(results, current_trade)
+#plot_function(results, current_trade)
 
 # close session
 # bitcoin.drop()
