@@ -1,4 +1,5 @@
 from typing import NamedTuple
+import json
 
 
 # struct-like
@@ -20,6 +21,8 @@ def price_calculator(results, last_trade):
         percentage = percent_diff(current_price, trade_open_value)
         profit = current_price - trade_open_value
         trade = Trade(trade_open_value, current_price, percentage, profit)
+        #mydict = trade._asdict()
+        #print('Trade', json.dumps(mydict, indent=4))
         return trade
     else:
         return None
