@@ -2,7 +2,6 @@
 import requests
 import pymongo
 from datetime import datetime
-from bson.json_util import dumps
 
 
 # create database and connect to mongoDB server
@@ -25,7 +24,7 @@ entry = bitcoin.insert_one(doc).inserted_id
 
 # queries for log
 query = list(bitcoin.find().sort('_id', -1).limit(1))
-print(dumps(query))
+print(query)
 
 
 # close session

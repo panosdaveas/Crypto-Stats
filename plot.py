@@ -65,8 +65,9 @@ def plot_function(results, trade):
     for i, document in enumerate(results, start=0):
         listDates.append(document['date'])
         listPrices.append(document['price'])
-        if document['price'] == trade[0]:
-            trade_id = i
+        if trade is not None:
+            if document['price'] == trade[0]:
+                trade_id = i
 
     fig, ax = plt.subplots()
     xpoints = np.array(listDates)
