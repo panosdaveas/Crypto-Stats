@@ -82,7 +82,7 @@ def plot_function(results, trade):
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade)
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
-    #plt.scatter(trade_id, trade[0], marker='+')
+    plt.scatter(trade_id, trade[0], marker='+')
     plt.tight_layout()
     plt.show()
 

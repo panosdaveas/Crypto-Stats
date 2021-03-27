@@ -19,7 +19,7 @@ last_open_trade = list(bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).li
 results = list(bitcoin.find({}, {'_id': False}))
 
 
-# buy
+# open trade
 open_trade = False
 if open_trade:
     bitcoin.update_one(last_entry[0], {'$set': {'buy': True}})
@@ -38,5 +38,3 @@ current_trade = price_calculator(results, last_open_trade)
 # plot operations
 plot_function(results, current_trade)
 
-# close session
-#myclient.close()
