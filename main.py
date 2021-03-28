@@ -1,7 +1,8 @@
 # imports...
 import pymongo
-from plot import plot_function
+
 from Math import price_calculator
+from plot import plot_function
 
 # create database and connect to mongoDB server
 myclient = pymongo.MongoClient('mongodb://localhost:27017')
@@ -12,12 +13,11 @@ if 'mydatabase' in dblist:
     print('The database exists.')
 bitcoin = mydatabase['BTC']
 
-
 # queries
 last_entry = list(bitcoin.find().sort('_id', -1).limit(1))
 last_open_trade = list(bitcoin.find({'buy': {'$exists': 1}}).sort('date', -1).limit(1))
 results = list(bitcoin.find({}, {'_id': False}))
-
+print(last_entry)
 
 # open trade
 open_trade = False
@@ -37,4 +37,3 @@ current_trade = price_calculator(results, last_open_trade)
 
 # plot operations
 plot_function(results, current_trade)
-
