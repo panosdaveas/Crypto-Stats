@@ -33,6 +33,19 @@ Be sure to have your system's `mongo`'s service stopped, or running at a differe
 # API
 Request limit from [coinAPI](https://docs.coinapi.io/#md-rest-api) = 100 / day
 
+# PIPENV
+
+to enable `pipenv`, run
+```
+$ pipenv shell
+$ python main.py
+```
+
+to run without loading the virtual environment:
+```
+pipenv run python main.py
+```
+
 # Current State
 
 ![Screen Recording 2021-03-24 at 10 46 33 AM](https://user-images.githubusercontent.com/63146477/112281434-b8e21100-8c8e-11eb-97e7-7b3577a1dad3.gif)
