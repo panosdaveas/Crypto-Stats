@@ -62,6 +62,7 @@ class SnappingCursor:
 
 
 def plot_function(results, trade):
+    #plt.style.use('dark_background')
     listDates = []
     listPrices = []
     trade_id = 0
@@ -77,16 +78,19 @@ def plot_function(results, trade):
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
     line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
-    if trade is not None:
-        plt.axhline(trade[0], color='blue', linestyle='--', linewidth=0.5,
-                    label='purchased')
-
+    plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
-    plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade)
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
-    plt.scatter(trade_id, trade[0], marker='+')
+    if trade is not None:
+        plt.axhline(trade.trade_open, color='blue', linestyle='--', linewidth=0.5,
+                    label='purchased')
+        if trade.buy:
+            plt.scatter(trade_id, trade[0], marker='+', color='g')
+        else:
+            plt.scatter(trade_id, trade[0], marker='+', color='r')
+
     plt.tight_layout()
     plt.show()
 
