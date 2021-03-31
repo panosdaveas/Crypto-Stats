@@ -34,7 +34,7 @@ def alert(results, last_trade):
     d = last_trade[0]['price']
     if last_trade[0]['buy'] is False:
         if percent_diff(b, c) < 0:
-            if percent_diff(a, b) >= 0.2:
+            if percent_diff(a, b) >= 0.1:
                 print("buy")
                 return True
     elif last_trade[0]['buy'] is True:
