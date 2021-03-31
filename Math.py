@@ -27,5 +27,25 @@ def price_calculator(results, last_trade):
         return None
 
 
+def alert(results, last_trade):
+    a = results[len(results) - 1]['price']
+    b = results[len(results) - 2]['price']
+    c = results[len(results) - 3]['price']
+    d = last_trade[0]['price']
+    if last_trade[0]['buy'] is False:
+        if percent_diff(b, c) < 0:
+            if percent_diff(a, b) >= .2:
+                print("buy")
+                return True
+    elif last_trade[0]['buy'] is True:
+        if percent_diff(a, d) > 0:
+            if percent_diff(a, b) <= -.2:
+                print('sell')
+                return False
+    print('None')
+    return None
+
+
 if __name__ == '__main__':
     price_calculator(results=list, last_trade=list)
+    alert(results=list, last_trade=list)

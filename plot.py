@@ -65,6 +65,9 @@ def plot_function(results, trade):
     #plt.style.use('dark_background')
     listDates = []
     listPrices = []
+    marks = []
+    mark_x = []
+    mark_y = []
     trade_id = 0
     for i, document in enumerate(results, start=0):
         listDates.append(document['date'])
@@ -72,12 +75,18 @@ def plot_function(results, trade):
         if trade is not None:
             if document['price'] == trade[0]:
                 trade_id = i
+        if 'buy' in document:
+            marks.append(document)
+            mark_y.append(document['price'])
+            mark_x.append(i)
 
     fig, ax = plt.subplots()
+    trades_x = np.array(mark_x)
+    trades_y = np.array(mark_y)
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
-    line, = plt.plot(x, ypoints, linewidth=0.6, label='current')
+    line, = plt.plot(x, ypoints, linewidth=0.6, label='current', zorder=1)
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
@@ -86,10 +95,16 @@ def plot_function(results, trade):
     if trade is not None:
         plt.axhline(trade.trade_open, color='blue', linestyle='--', linewidth=0.5,
                     label='purchased')
-        if trade.buy:
-            plt.scatter(trade_id, trade[0], marker='+', color='g')
+        #if trade.buy:
+        #    plt.scatter(trade_id, trade[0], marker='+', color='g')
+        #else:
+        #    plt.scatter(trade_id, trade[0], marker='+', color='r')
+
+    for i, mark in enumerate(marks, start=0):
+        if mark['buy'] is True:
+            plt .scatter(trades_x[i], trades_y[i], marker='+', color='g', zorder=2)
         else:
-            plt.scatter(trade_id, trade[0], marker='+', color='r')
+            plt.scatter(trades_x[i], trades_y[i], marker='+', color='r', zorder=2)
 
     plt.tight_layout()
     plt.show()
