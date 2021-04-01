@@ -106,6 +106,7 @@ def plot_function(results, trade):
         else:
             plt.scatter(trades_x[i], trades_y[i], marker='+', color='r', zorder=2)
 
+    plt.xlim(x[len(x) - 50], x[len(x) - 1] + 1)
     plt.tight_layout()
     plt.show()
 
