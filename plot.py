@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Math import Trade
+from Math import percent_diff
 
 
 class SnappingCursor:
 
-    def __init__(self, ax, line, minY_value, xpoints, trade_id, trade):
+    def __init__(self, ax, line, minY_value, xpoints, trade_id, trade, current_price):
         self.xpoints = xpoints
         self.ax = ax
         self.horizontal_line = ax.axhline(y=minY_value, color='k', lw=0.5, ls='--')
@@ -14,15 +14,20 @@ class SnappingCursor:
         self.x, self.y = line.get_data()
         self._last_index = None
         self.trade = trade
-        if self.trade is not None:
-            self.current_price = ax.axhline(trade.current_price, color='green', lw=0.5,
-                                            ls='--')
-            if trade.percentage < 0:
-                self.current_price = ax.axhline(trade.current_price, color='red',
-                                                lw=0.5, ls='--')
-            self.trade_value = trade.trade_open
+        self.flag = False
+        if len(self.trade) != 0:
+            self.trade_value = trade[0]['price']
             self.trade_id = trade_id
-            self.percentage = trade.percentage
+            if 'sold' in trade[0]:
+                self.percentage = trade[0]['sold']['profit']
+            else:
+                self.flag = True
+                self.percentage = percent_diff(current_price, trade[0]['price'])
+                self.current_price = ax.axhline(current_price, color='g',
+                                                lw=0.5, ls='--')
+                if self.percentage < 0:
+                    self.current_price = ax.axhline(current_price, color='r',
+                                                    lw=0.5, ls='--')
         # text location in axes coords
         self.text = ax.text(0.25, 0.5, '', transform=ax.transAxes, alpha=0.5)
 
@@ -31,7 +36,7 @@ class SnappingCursor:
         self.horizontal_line.set_visible(False)
         self.vertical_line.set_visible(visible)
         self.text.set_visible(visible)
-        if self.trade is not None:
+        if self.flag:
             self.current_price.set_visible(visible)
         return need_redraw
 
@@ -54,7 +59,7 @@ class SnappingCursor:
             self.horizontal_line.set_ydata(y)
             self.vertical_line.set_xdata(x)
             self.text.set_text('%1.2f, %s' % (y, self.xpoints[x]))
-            if self.trade is not None:
+            if len(self.trade) != 0:
                 if self.trade_value - 100 <= event.ydata <= self.trade_value + 100:
                     self.text.set_text('open_trade @ %1.2f  p/l %1.2f %%' % (
                         self.trade_value, self.percentage))
@@ -62,7 +67,7 @@ class SnappingCursor:
 
 
 def plot_function(results, trade):
-    #plt.style.use('dark_background')
+    # plt.style.use('dark_background')
     listDates = []
     listPrices = []
     marks = []
@@ -72,13 +77,13 @@ def plot_function(results, trade):
     for i, document in enumerate(results, start=0):
         listDates.append(document['date'])
         listPrices.append(document['price'])
-        if trade is not None:
-            if document['price'] == trade[0]:
-                trade_id = i
         if 'buy' in document:
             marks.append(document)
             mark_y.append(document['price'])
             mark_x.append(i)
+        if len(trade) != 0:
+            if document['price'] == trade[0]['price']:
+                trade_id = i
 
     fig, ax = plt.subplots()
     trades_x = np.array(mark_x)
@@ -90,26 +95,22 @@ def plot_function(results, trade):
     plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
     plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
-    snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade)
+    snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade,
+                                 listPrices[-1])
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
-    if trade is not None:
-        plt.axhline(trade.trade_open, color='blue', linestyle='--', linewidth=0.5,
+    if len(trade) != 0:
+        plt.axhline(trade[0]['price'], color='blue', linestyle='--', linewidth=0.5,
                     label='purchased')
-        #if trade.buy:
-        #    plt.scatter(trade_id, trade[0], marker='+', color='g')
-        #else:
-        #    plt.scatter(trade_id, trade[0], marker='+', color='r')
-
     for i, mark in enumerate(marks, start=0):
         if mark['buy'] is True:
-            plt .scatter(trades_x[i], trades_y[i], marker='+', color='g', zorder=2)
+            plt.scatter(trades_x[i], trades_y[i], marker='+', color='g', zorder=2)
         else:
             plt.scatter(trades_x[i], trades_y[i], marker='+', color='r', zorder=2)
 
-    plt.xlim(x[len(x) - 50], x[len(x) - 1] + 1)
+    plt.xlim(mark_x[0], x[len(x) - 1] + 1)
     plt.tight_layout()
     plt.show()
 
 
 if __name__ == '__main__':
-    plot_function(results=list, trade=Trade)
+    plot_function(results=list, trade=list)
