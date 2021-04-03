@@ -45,6 +45,13 @@ to run without loading the virtual environment:
 ```
 pipenv run python main.py
 ```
+# Crontab
+
+add a cronjob to run ```main.py``` from inside\
+the pipenv shell :
+```
+*/10 * * * * cd path/to/file/ && /usr/local/bin/pipenv run python main.py
+```
 
 # Current State
 
