@@ -1,6 +1,6 @@
 [DATABASE]
 type = mongodb
-ip = 192.168.1.5
+ip = localhost
 port = 27017
 name = mydatabase
 
