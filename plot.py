@@ -10,7 +10,7 @@ class SnappingCursor:
         self.xpoints = xpoints
         self.ax = ax
         self.horizontal_line = ax.axhline(y=minY_value, color='k', lw=0.5, ls='--')
-        self.vertical_line = ax.axvline(color='k', lw=0.5, ls='--')
+        self.vertical_line = ax.axvline(color='w', lw=0.5, ls='--')
         self.x, self.y = line.get_data()
         self._last_index = None
         self.trade = trade
@@ -67,7 +67,7 @@ class SnappingCursor:
 
 
 def plot_function(results, trade):
-    # plt.style.use('dark_background')
+    plt.style.use('dark_background')
     listDates = []
     listPrices = []
     marks = []
@@ -91,23 +91,22 @@ def plot_function(results, trade):
     xpoints = np.array(listDates)
     ypoints = np.array(listPrices)
     x = np.arange(len(xpoints))
-    line, = plt.plot(x, ypoints, linewidth=0.6, label='current', zorder=1)
-    plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
-    plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
+    line, = plt.plot(x, ypoints, linewidth=0.6, label='current', zorder=1, color='lavender')
+    #plt.fill_between(x, ypoints.min(), ypoints, alpha=.1)
+    #plt.grid(axis='y', linestyle='dotted', linewidth=0.5)
     plt.xticks([])
     snap_cursor = SnappingCursor(ax, line, ypoints.min(), xpoints, trade_id, trade,
                                  listPrices[-1])
     fig.canvas.mpl_connect('motion_notify_event', snap_cursor.on_mouse_move)
     if len(trade) != 0:
-        plt.axhline(trade[0]['price'], color='blue', linestyle='--', linewidth=0.5,
-                    label='purchased')
+        plt.axhline(trade[0]['price'], color='pink', linestyle='--', linewidth=0.5)
     for i, mark in enumerate(marks, start=0):
         if mark['buy'] is True:
-            plt.scatter(trades_x[i], trades_y[i], marker='+', color='g', zorder=2)
+            plt.scatter(trades_x[i], trades_y[i], marker='P', color='cyan', zorder=2)
         else:
-            plt.scatter(trades_x[i], trades_y[i], marker='+', color='r', zorder=2)
+            plt.scatter(trades_x[i], trades_y[i], marker='P', color='magenta', zorder=2)
 
-    plt.xlim(mark_x[0], x[len(x) - 1] + 1)
+    plt.xlim(mark_x[0], x[len(x) - 1] + 3)
     plt.tight_layout()
     plt.show()
 

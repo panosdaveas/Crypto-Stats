@@ -23,6 +23,8 @@ def alert_close(results, last_trade):
             if percent_diff(a, b) <= -0.1:
                 print('sell')
                 return True
+        elif percent_diff(a, d) <= -0.3:
+            return True
 
 
 if __name__ == '__main__':
