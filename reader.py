@@ -1,7 +1,7 @@
 # imports...
 import pymongo
 
-from Math import alert_open, alert_close, percent_diff
+from player import alert_open, alert_close, percent_diff
 from plot import plot_function
 
 # create database and connect to mongoDB server
@@ -9,9 +9,9 @@ myclient = pymongo.MongoClient('mongodb://localhost:27017')
 mydatabase = myclient['mydatabase']
 bitcoin = mydatabase['BTC']
 dblist = myclient.list_database_names()
-# print(dblist)
-# if 'mydatabase' in dblist:
-#    print('The database exists.')
+print(dblist)
+if 'mydatabase' in dblist:
+    print('The database exists.')
 
 # queries
 results = list(bitcoin.find({}, {'_id': False}))
@@ -34,4 +34,4 @@ if close_trade:
     print('sell')
 
 # plot operations
-plot_function(results, last_open_trade)
+#plot_function(results, last_open_trade)

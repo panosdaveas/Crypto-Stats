@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from Math import percent_diff
+from player import percent_diff
 
 
 class SnappingCursor:
