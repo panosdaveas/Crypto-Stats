@@ -3,16 +3,18 @@ import pymongo
 
 from player import alert_open, alert_close, percent_diff
 from plot import plot_function
+from config import Config
 
 
 def read():
+    config = Config()
     # create database and connect to mongoDB server
-    myclient = pymongo.MongoClient('mongodb://localhost:27017')
-    mydatabase = myclient['mydatabase']
-    bitcoin = mydatabase['BTC']
+    myclient = pymongo.MongoClient(config.get_db_url())
+    mydatabase = myclient[config.get_db_name()]
+    bitcoin = mydatabase[config.get_api_asset()]
     dblist = myclient.list_database_names()
     print(dblist)
-    if 'mydatabase' in dblist:
+    if config.get_db_name() in dblist:
         print('The database exists.')
 
     # queries

@@ -1,0 +1,10 @@
+[DATABASE]
+type = mongodb
+ip = localhost
+port = 27017
+name = mydatabase
+
+[API]
+url = https://rest.coinapi.io/v1/assets/
+asset = BTC
+key = B284C4BF-9B46-46F4-B377-0E1CA1EEECC7

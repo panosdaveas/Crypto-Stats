@@ -3,17 +3,19 @@ from datetime import datetime
 
 import pymongo
 import requests
+from config import Config
 
 
 def write():
+    config = Config()
     # create database and connect to mongoDB server
-    myclient = pymongo.MongoClient('mongodb://localhost:27017')
-    mydatabase = myclient['mydatabase']
+    myclient = pymongo.MongoClient(config.get_db_url())
+    mydatabase = myclient[config.get_db_name()]
     dblist = myclient.list_database_names()
 
     # call CoinAPI/fetch data for Bitcoin
-    url = 'https://rest.coinapi.io/v1/assets/BTC'
-    headers = {'X-CoinAPI-Key': 'B284C4BF-9B46-46F4-B377-0E1CA1EEECC7'}
+    url = config.get_api_url()
+    headers = {'X-CoinAPI-Key': config.get_api_key()}
     response = requests.get(url, headers=headers).json()
 
     # populate bitcoin_collection
