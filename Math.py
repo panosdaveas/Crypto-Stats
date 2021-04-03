@@ -1,5 +1,4 @@
 from typing import NamedTuple
-import json
 
 
 # struct-like
@@ -8,6 +7,7 @@ class Trade(NamedTuple):
     current_price: float
     percentage: float
     profit: float
+    buy: bool
 
 
 def percent_diff(a, b):
@@ -20,9 +20,8 @@ def price_calculator(results, last_trade):
         current_price = results[len(results) - 1]['price']
         percentage = percent_diff(current_price, trade_open_value)
         profit = current_price - trade_open_value
-        trade = Trade(trade_open_value, current_price, percentage, profit)
-        #mydict = trade._asdict()
-        #print('Trade', json.dumps(mydict, indent=4))
+        buy = last_trade[0]['buy']
+        trade = Trade(trade_open_value, current_price, percentage, profit, buy)
         return trade
     else:
         return None
